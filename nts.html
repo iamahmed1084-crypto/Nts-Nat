@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurelia Academic — NTS NAT-ICS Preparation Suite</title>
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & LUXURY ACADEMIC THEME
+       ========================================================================== */
+    :root {
+      --bg-primary: #0a0f1c;
+      --bg-secondary: #111827;
+      --bg-elevated: #172033;
+      --bg-glass: rgba(23, 32, 51, 0.82);
+      --border-subtle: rgba(212, 175, 55, 0.18);
+      --border-strong: rgba(212, 175, 55, 0.45);
+      --gold-primary: #d4af37;
+      --gold-light: #f1d57e;
+      --gold-dark: #aa851f;
+      --gold-glow: rgba(212, 175, 55, 0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.14);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.14);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.14);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-card: 0 14px 35px rgba(0, 0, 0, 0.45);
+      --shadow-gold: 0 8px 28px rgba(212, 175, 55, 0.18);
+      --font-serif: Georgia, "Times New Roman", serif;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --transition: 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(212, 175, 55, 0.08), transparent 36%),
+        radial-gradient(circle at 88% 22%, rgba(30, 58, 138, 0.18), transparent 42%),
+        linear-gradient(180deg, #090d18 0%, #0d1424 100%);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Accessible Focus Rings */
+    :focus-visible {
+      outline: 2px solid var(--gold-light);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -60px;
+      left: 16px;
+      background: var(--gold-primary);
+      color: #090d18;
+      padding: 10px 16px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      z-index: 1000;
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+      top: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(10, 15, 28, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 74px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-crest {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      color: #0a0f1c;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-serif);
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--text-primary);
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      color: var(--gold-primary);
+      font-weight: 600;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--gold-light);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .primary-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.08);
+      border-color: var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       BUTTONS & CONTROLS
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 55%, var(--gold-dark) 100%);
+      color: #090d18;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.28);
+    }
+
+    .btn-outline {
+      background: rgba(23, 32, 51, 0.65);
+      color: var(--gold-light);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background: rgba(212, 175, 55, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--gold-primary);
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ==========================================================================
+       SECTIONS & HEADINGS
+       ========================================================================== */
+    .section {
+      padding: 68px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-header {
+      margin-bottom: 34px;
+      max-width: 760px;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.22;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+    }
+
+    /* ==========================================================================
+       HERO & OVERVIEW DASHBOARD
+       ========================================================================== */
+    .hero {
+      padding: 74px 0 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--border-strong);
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.1rem, 4.2vw, 3.3rem);
+      line-height: 1.15;
+      margin-bottom: 18px;
+      color: var(--text-primary);
+    }
+
+    .hero-title span {
+      color: var(--gold-light);
+    }
+
+    .hero-lead {
+      font-size: 1.08rem;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 600px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 1.25rem;
+      color: var(--gold-light);
+      font-family: var(--font-serif);
+    }
+
+    .meta-item span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Telemetry / Readiness Card */
+    .dashboard-panel {
+      background: linear-gradient(160deg, rgba(23, 32, 51, 0.95), rgba(14, 21, 37, 0.98));
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--gold-light);
+    }
+
+    .status-pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-weight: 600;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-box {
+      background: rgba(10, 15, 28, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .kpi-value {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--gold-primary);
+      margin-top: 2px;
+    }
+
+    .blueprint-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .blueprint-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-sm);
+    }
+
+    .blueprint-weight {
+      font-family: var(--font-mono);
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    /* Subject Overview Grid */
+    .subject-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+      margin-top: 44px;
+    }
+
+    .overview-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .overview-card:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .overview-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .overview-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--text-primary);
+    }
+
+    .weight-tag {
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--gold-glow);
+      color: var(--gold-light);
+      border: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    .overview-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .overview-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       FORMS & INPUTS
+       ========================================================================== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .input-control,
+    .select-control {
+      width: 100%;
+      padding: 11px 14px;
+      background: #0b1120;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.94rem;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .input-control:hover,
+    .select-control:hover {
+      border-color: var(--border-strong);
+    }
+
+    .input-control:focus,
+    .select-control:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+
+    .validation-msg {
+      color: var(--danger);
+      font-size: 0.84rem;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+
+    /* ==========================================================================
+       PAST PAPERS ARCHIVE SECTION
+       ========================================================================== */
+    .filter-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .papers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+
+    .paper-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: var(--transition);
+    }
+
+    .paper-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .paper-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-demo {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-verified {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-session {
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-light);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .paper-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.12rem;
+      margin-bottom: 8px;
+    }
+
+    .paper-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .paper-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 44px 24px;
+      background: var(--bg-secondary);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      margin-bottom: 28px;
+    }
+
+    .empty-state h3 {
+      font-family: var(--font-serif);
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto 16px;
+      font-size: 0.94rem;
+    }
+
+    .add-paper-drawer {
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .add-paper-drawer summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--gold-light);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .add-paper-drawer summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .add-paper-form {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       MOCK EXAM ENGINE
+       ========================================================================== */
+    .mock-shell {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .exam-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .timer-badge {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      background: #0a0f1c;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+    }
+
+    .timer-badge.timer-low {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #0a0f1c;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .exam-workspace {
+      display: grid;
+      grid-template-columns: 1fr 270px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .question-stage {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .question-meta-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--gold-primary);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .question-prompt {
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      line-height: 1.55;
+    }
+
+    .options-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: #0d1424;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.96rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--gold-primary);
+      background: rgba(212, 175, 55, 0.07);
+    }
+
+    .option-btn.selected {
+      border-color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.16);
+      box-shadow: inset 0 0 0 1px var(--gold-primary);
+    }
+
+    .option-btn.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .option-btn.incorrect {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .option-key {
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.07);
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      color: var(--gold-light);
+    }
+
+    .question-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .palette-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .palette-card h4 {
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .palette-btn {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: #0d1424;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .palette-btn:hover {
+      border-color: var(--gold-primary);
+    }
+
+    .palette-btn.answered {
+      background: rgba(212, 175, 55, 0.22);
+      border-color: var(--gold-primary);
+      color: var(--gold-light);
+    }
+
+    .palette-btn.current {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 1px;
+    }
+
+    .confirm-banner {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid var(--warning);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    /* Results View */
+    .results-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 22px 0 28px;
+    }
+
+    .result-stat {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: center;
+    }
+
+    .result-stat .num {
+      font-size: 1.8rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .result-stat .lbl {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .review-item {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .review-item.is-correct {
+      border-left: 4px solid var(--success);
+    }
+
+    .review-item.is-wrong {
+      border-left: 4px solid var(--danger);
+    }
+
+    .explanation-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(10, 15, 28, 0.75);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       SUBJECT PRACTICE HUB
+       ========================================================================== */
+    .subject-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--gold-primary);
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.08));
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    .practice-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+
+    .practice-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    /* ==========================================================================
+       RESOURCES & STUDY STRATEGY
+       ========================================================================== */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .resource-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .resource-card h3 {
+      font-family: var(--font-serif);
+      color: var(--gold-light);
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+    }
+
+    .resource-card ul {
+      padding-left: 18px;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 28px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 13px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    th {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--gold-light);
+      font-family: var(--font-serif);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .site-footer {
+      padding: 36px 0 48px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .exam-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-toggle {
+        display: inline-flex;
+      }
+      .primary-nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 0 16px;
+        border-top: 1px solid var(--border-subtle);
+      }
+      .primary-nav.open {
+        display: flex;
+      }
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 12px 0;
+      }
+      .section {
+        padding: 48px 0;
+      }
+      .mock-shell {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ========================================================================
+       HEADER
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#overview" class="brand" aria-label="Aurelia Academic NAT-ICS Home">
+        <div class="brand-crest" aria-hidden="true">A</div>
+        <div class="brand-text">
+          <span class="brand-title">Aurelia Academic</span>
+          <span class="brand-subtitle">NTS NAT-ICS Suite</span>
+        </div>
+      </a>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        id="navToggle"
+        aria-expanded="false"
+        aria-controls="primaryNav"
+      >
+        Menu
+      </button>
+
+      <nav class="primary-nav" id="primaryNav" aria-label="Primary Navigation">
+        <a href="#overview" class="nav-link active">Overview</a>
+        <a href="#past-papers" class="nav-link">Past Papers</a>
+        <a href="#mock-test" class="nav-link">Mock Exam</a>
+        <a href="#practice" class="nav-link">Subject Practice</a>
+        <a href="#resources" class="nav-link">Study Guide</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ======================================================================
+         1. LANDING HERO & ACADEMIC OVERVIEW DASHBOARD
+         ====================================================================== -->
+    <section id="overview" class="section hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-badge">National Aptitude Test — ICS Stream (90 MCQs • 120 Mins)</div>
+            <h1 class="hero-title">
+              Precision Preparation for <span>NTS NAT-ICS</span> Excellence.
+            </h1>
+            <p class="hero-lead">
+              Master Quantitative, Analytical, English, Physics, Advanced Mathematics, and Computer Science through timed mock examinations, curated practice drills, and structured study guides.
+            </p>
+            <div class="hero-actions">
+              <a href="#mock-test" class="btn btn-gold">Launch Mock Exam</a>
+              <a href="#practice" class="btn btn-outline">Practice Subject MCQs</a>
+            </div>
+            <div class="hero-meta">
+              <div class="meta-item">
+                <strong>6 Modules</strong>
+                <span>Complete NAT-ICS Syllabus</span>
+              </div>
+              <div class="meta-item">
+                <strong>No Negative Marking</strong>
+                <span>Standard NTS Scoring</span>
+              </div>
+              <div class="meta-item">
+                <strong>Offline Ready</strong>
+                <span>Zero External Dependencies</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Local Progress & Exam Blueprint Dashboard -->
+          <aside class="dashboard-panel" aria-label="Preparation Telemetry">
+            <div class="panel-header">
+              <h2 class="panel-title">Candidate Readiness Overview</h2>
+              <span class="status-pill">Local Storage Active</span>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi-box">
+                <div class="kpi-label">Best Mock Score</div>
+                <div class="kpi-value" id="dashBestScore">—</div>
+                <div class="kpi-sub" id="dashBestMeta">No attempt recorded yet</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">Tests Completed</div>
+                <div class="kpi-value" id="dashTestsCount">0</div>
+                <div class="kpi-sub" id="dashPracticeCount">0 practice drills solved</div>
+              </div>
+            </div>
+
+            <h3 style="font-size: 0.84rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.9px; margin-bottom: 10px;">
+              Standard NTS NAT-ICS Weightage
+            </h3>
+            <ul class="blueprint-list">
+              <li class="blueprint-row">
+                <span>English (Verbal Reasoning)</span>
+                <span class="blueprint-weight">20 MCQs (22.2%)</span>
+              </li>
+              <li class="blueprint-row">
+                <span>Analytical Reasoning</span>
+                <span class="blueprint-weight">20 MCQs (22.2%)</span>
+              </li>
+              <li class="blueprint-row">
+                <span>Quantitative Reasoning</span>
+                <span class="blueprint-weight">20 MCQs (22.2%)</span>
+              </li>
+              <li class="blueprint-row">
+                <span>Subject Core (Physics, Math, CS)</span>
+                <span class="blueprint-weight">30 MCQs (33.3%)</span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+
+        <!-- Six Subject Cards -->
+        <div class="subject-overview-grid" id="subjectOverviewGrid">
+          <!-- Populated dynamically via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. PAST PAPERS ARCHIVE (SAMPLE / DEMO ENTRIES + VERIFIED LINK ADDER)
+         ====================================================================== -->
+    <section id="past-papers" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Archive & Specimen Papers</span>
+          <h2 class="section-title">NAT-ICS Paper Repository</h2>
+          <p class="section-desc">
+            Entries below are clearly labeled <strong>Sample / Demo</strong> reconstructions designed to mirror NAT-ICS formatting. Because official NTS booklets vary by test center, use the drawer below to attach your own verified PDF links or local study files.
+          </p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar" role="search" aria-label="Filter specimen papers">
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="filterYear" class="field-label">Academic Year</label>
+              <select id="filterYear" class="select-control">
+                <option value="all">All Years</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="filterSession" class="field-label">Test Session</label>
+              <select id="filterSession" class="select-control">
+                <option value="all">All Sessions</option>
+                <option value="Spring">Spring / NAT-I–III</option>
+                <option value="Summer">Summer / NAT-IV–VIII</option>
+                <option value="Fall">Fall / NAT-IX–XII</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="filterSearch" class="field-label">Keyword Search</label>
+              <input
+                type="search"
+                id="filterSearch"
+                class="input-control"
+                placeholder="e.g., Specimen, Analytical, Set A..."
+              />
+            </div>
+
+            <div class="field-group">
+              <button type="button" id="resetPaperFilters" class="btn btn-ghost" style="width: 100%;">
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paper Cards Container -->
+        <div class="papers-grid" id="papersGrid"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="papersEmptyState" role="status">
+          <h3>No Papers Match Selected Filters</h3>
+          <p>
+            No sample or custom entries matched your chosen year, session, or search term. Clear the active filters or add a new verified paper entry below.
+          </p>
+          <button type="button" id="emptyResetBtn" class="btn btn-outline btn-sm">
+            Show All Papers
+          </button>
+        </div>
+
+        <!-- Add Verified Paper Link Form -->
+        <details class="add-paper-drawer">
+          <summary>
+            <span>+ Add a Verified Past-Paper Link or Custom Entry (Saved Locally)</span>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Click to expand</span>
+          </summary>
+          <form id="addPaperForm" class="add-paper-form" novalidate>
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="newPaperTitle" class="field-label">Paper Title *</label>
+                <input
+                  type="text"
+                  id="newPaperTitle"
+                  class="input-control"
+                  placeholder="e.g., NAT-ICS Morning Booklet (Verified)"
+                  required
+                />
+              </div>
+              <div class="field-group">
+                <label for="newPaperYear" class="field-label">Year *</label>
+                <select id="newPaperYear" class="select-control">
+                  <option value="2026">2026</option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="newPaperSession" class="field-label">Session *</label>
+                <select id="newPaperSession" class="select-control">
+                  <option value="Spring">Spring</option>
+                  <option value="Summer">Summer</option>
+                  <option value="Fall">Fall</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="newPaperUrl" class="field-label">Verified URL or File Path *</label>
+                <input
+                  type="url"
+                  id="newPaperUrl"
+                  class="input-control"
+                  placeholder="https://example.edu.pk/nat-ics-paper.pdf"
+                  required
+                />
+              </div>
+            </div>
+            <div class="validation-msg" id="addPaperError" aria-live="polite"></div>
+            <div style="margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap;">
+              <button type="submit" class="btn btn-gold btn-sm">Save Verified Entry</button>
+              <button type="button" id="clearCustomPapersBtn" class="btn btn-ghost btn-sm">
+                Remove Custom Entries
+              </button>
+            </div>
+          </form>
+        </details>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. TIMED MOCK EXAMINATION ENGINE
+         ====================================================================== -->
+    <section id="mock-test" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Simulated Exam Environment</span>
+          <h2 class="section-title">NAT-ICS Timed Mock Test</h2>
+          <p class="section-desc">
+            Configure a full-syllabus simulation or target a specific discipline. All questions are clearly labeled practice items with full step-by-step explanations upon submission.
+          </p>
+        </div>
+
+        <div class="mock-shell">
+          <!-- STEP A: CONFIGURATION SETUP -->
+          <div id="mockSetupView">
+            <h3 style="font-family: var(--font-serif); margin-bottom: 18px; color: var(--gold-light);">
+              Configure Examination Parameters
+            </h3>
+            <form id="mockSetupForm" novalidate>
+              <div class="form-grid">
+                <div class="field-group">
+                  <label for="mockSubject" class="field-label">Exam Scope / Subject</label>
+                  <select id="mockSubject" class="select-control">
+                    <option value="all">Full NAT-ICS Balanced Mix (All 6 Subjects)</option>
+                    <option value="Quantitative Reasoning">Quantitative Reasoning</option>
+                    <option value="Analytical Reasoning">Analytical Reasoning</option>
+                    <option value="English">English</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Advanced Mathematics">Advanced Mathematics</option>
+                    <option value="Computer Science">Computer Science</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label for="mockCount" class="field-label">Number of Questions (5 – 36)</label>
+                  <input
+                    type="number"
+                    id="mockCount"
+                    class="input-control"
+                    min="5"
+                    max="36"
+                    value="12"
+                    required
+                  />
+                </div>
+
+                <div class="field-group">
+                  <label for="mockDuration" class="field-label">Time Limit in Minutes (3 – 120)</label>
+                  <input
+                    type="number"
+                    id="mockDuration"
+                    class="input-control"
+                    min="3"
+                    max="120"
+                    value="15"
+                    required
+                  />
+                </div>
+
+                <div class="field-group">
+                  <button type="submit" class="btn btn-gold" style="width: 100%;">
+                    Start Timed Exam
+                  </button>
+                </div>
+              </div>
+              <div class="validation-msg" id="mockSetupError" aria-live="polite"></div>
+            </form>
+          </div>
+
+          <!-- STEP B: ACTIVE EXAM INTERFACE -->
+          <div id="mockActiveView" class="hidden">
+            <div class="exam-topbar">
+              <div>
+                <div style="font-size: 0.8rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 1px;">
+                  Active Mock Session
+                </div>
+                <strong id="examScopeLabel" style="font-size: 1.05rem;">Full NAT-ICS Mix</strong>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <span id="answeredCounter" style="font-size: 0.9rem; color: var(--text-secondary);">
+                  0 / 12 Answered
+                </span>
+                <div class="timer-badge" id="examTimer" aria-live="off">15:00</div>
+              </div>
+            </div>
+
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="examProgressFill"></div>
+            </div>
+
+            <div class="exam-workspace">
+              <div class="question-stage">
+                <div class="question-meta-line">
+                  <span id="examQNumber">Question 1 of 12</span>
+                  <span id="examQSubject">Subject • Practice Question</span>
+                </div>
+                <div class="question-prompt" id="examQPrompt"></div>
+                <div class="options-stack" id="examOptionsList" role="radiogroup" aria-label="Answer choices"></div>
+
+                <div class="question-controls">
+                  <div style="display: flex; gap: 10px;">
+                    <button type="button" id="prevQBtn" class="btn btn-ghost btn-sm">Previous</button>
+                    <button type="button" id="nextQBtn" class="btn btn-outline btn-sm">Next</button>
+                  </div>
+                  <button type="button" id="openSubmitConfirmBtn" class="btn btn-gold btn-sm">
+                    Submit Examination
+                  </button>
+                </div>
+
+                <!-- Submit Confirmation Banner -->
+                <div class="confirm-banner hidden" id="submitConfirmBanner" role="alert">
+                  <div>
+                    <strong style="color: var(--warning);">Confirm Final Submission?</strong>
+                    <p id="submitConfirmText" style="font-size: 0.88rem; color: var(--text-secondary);">
+                      You have answered all questions. Once submitted, answers are locked for grading.
+                    </p>
+                  </div>
+                  <div style="display: flex; gap: 10px;">
+                    <button type="button" id="cancelSubmitBtn" class="btn btn-ghost btn-sm">Continue Test</button>
+                    <button type="button" id="confirmSubmitBtn" class="btn btn-gold btn-sm">Confirm &amp; Grade</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question Navigation Palette -->
+              <aside class="palette-card" aria-label="Question navigation palette">
+                <h4>Question Navigator</h4>
+                <div class="palette-grid" id="examPaletteGrid"></div>
+                <p style="font-size: 0.78rem; color: var(--text-muted);">
+                  Gold cells indicate answered items. Click any number to jump directly.
+                </p>
+              </aside>
+            </div>
+          </div>
+
+          <!-- STEP C: RESULTS & EXPLANATION REVIEW -->
+          <div id="mockResultsView" class="hidden">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
+              <div>
+                <span class="section-eyebrow">Performance Report</span>
+                <h3 style="font-family: var(--font-serif); font-size: 1.6rem;">Mock Examination Results</h3>
+              </div>
+              <button type="button" id="retakeNewMockBtn" class="btn btn-gold btn-sm">
+                Configure Another Test
+              </button>
+            </div>
+
+            <div class="results-summary" id="resultsSummaryGrid"></div>
+
+            <h4 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold-light); margin-top: 12px;">
+              Detailed Answer Review &amp; Explanations
+            </h4>
+            <div class="review-list" id="resultsReviewList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. SUBJECT-BY-SUBJECT INTERACTIVE PRACTICE SECTION
+         ====================================================================== -->
+    <section id="practice" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Topic Mastery Drills</span>
+          <h2 class="section-title">Subject Practice Bank</h2>
+          <p class="section-desc">
+            Select any of the six NAT-ICS subjects below. Every item is a realistic <strong>Practice Question</strong> providing instant correctness feedback and conceptual rationale.
+          </p>
+        </div>
+
+        <div class="subject-tabs" id="practiceSubjectTabs" role="tablist" aria-label="NAT-ICS Subjects">
+          <!-- Tabs rendered via JS -->
+        </div>
+
+        <div class="practice-toolbar">
+          <div>
+            <strong id="activePracticeTitle" style="color: var(--gold-light);">Quantitative Reasoning</strong>
+            <span id="practiceScoreBadge" style="margin-left: 12px; font-size: 0.88rem; color: var(--text-secondary);">
+              Session Score: 0 / 0
+            </span>
+          </div>
+          <button type="button" id="resetPracticeSubjectBtn" class="btn btn-ghost btn-sm">
+            Reset Current Subject
+          </button>
+        </div>
+
+        <div id="practiceQuestionsContainer"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. EXAM STRATEGY & STUDY RESOURCES
+         ====================================================================== -->
+    <section id="resources" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Academic Guidance</span>
+          <h2 class="section-title">NAT-ICS Preparation Blueprint &amp; Strategy</h2>
+          <p class="section-desc">
+            Structured time-allocation tactics and syllabus priorities tailored for FSc Pre-Engineering / ICS candidates targeting top-percentile NTS scores.
+          </p>
+        </div>
+
+        <div class="resources-grid">
+          <article class="resource-card">
+            <h3>1. Time Management (120 Minutes)</h3>
+            <ul>
+              <li><strong>English (15 mins):</strong> Complete synonyms, antonyms, analogies, and sentence completion swiftly to bank extra minutes.</li>
+              <li><strong>Subject Core (35 mins):</strong> Tackle Physics, Math, and Computer Science formulas while mental freshness is highest.</li>
+              <li><strong>Quantitative (35 mins):</strong> Prioritize percentages, ratios, algebra, and geometry before multi-step word problems.</li>
+              <li><strong>Analytical (35 mins):</strong> Diagram seating arrangements, conditional rules, and grouping constraints cleanly on scratch paper.</li>
+            </ul>
+          </article>
+
+          <article class="resource-card">
+            <h3>2. High-Yield ICS Syllabus Focus</h3>
+            <ul>
+              <li><strong>Mathematics:</strong> Matrices, quadratic equations, trigonometry identities, derivatives, integration basics, and conic sections.</li>
+              <li><strong>Physics:</strong> Vectors, kinematics, work-energy theorem, electrostatics, current electricity, and modern physics.</li>
+              <li><strong>Computer Science:</strong> Data structures, Boolean logic gates, DBMS normalization, OSI networking layers, and C/C++ control flow.</li>
+            </ul>
+          </article>
+
+          <article class="resource-card">
+            <h3>3. Exam-Day Execution Rules</h3>
+            <ul>
+              <li><strong>Zero Negative Marking:</strong> Never leave an OMR bubble blank—eliminate two implausible choices and make an educated selection.</li>
+              <li><strong>Bubble Batching:</strong> Mark answers on the question booklet in groups of 10, then transfer carefully to the OMR sheet to avoid row shifts.</li>
+              <li><strong>Mental Math Shortcuts:</strong> Memorize squares up to 25, cubes up to 12, and fraction-to-percentage equivalents (e.g., 1/8 = 12.5%).</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="table-wrap" role="region" aria-label="NAT-ICS Section Breakdown Table">
+          <table>
+            <thead>
+              <tr>
+                <th>Test Section</th>
+                <th>Questions</th>
+                <th>Target Pace</th>
+                <th>Core Assessment Focus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>English</strong></td>
+                <td>20 MCQs</td>
+                <td>45 sec / MCQ</td>
+                <td>Vocabulary in context, grammar usage, analogies, short reading comprehension</td>
+              </tr>
+              <tr>
+                <td><strong>Analytical Reasoning</strong></td>
+                <td>20 MCQs</td>
+                <td>105 sec / MCQ</td>
+                <td>Scenario-based deduction, ordering, grouping, conditional logic</td>
+              </tr>
+              <tr>
+                <td><strong>Quantitative Reasoning</strong></td>
+                <td>20 MCQs</td>
+                <td>105 sec / MCQ</td>
+                <td>Arithmetic, ratios, percentages, basic algebra, plane geometry</td>
+              </tr>
+              <tr>
+                <td><strong>Physics (ICS Core)</strong></td>
+                <td>10 MCQs</td>
+                <td>70 sec / MCQ</td>
+                <td>Intermediate Part I &amp; II mechanics, waves, electromagnetism, electronics</td>
+              </tr>
+              <tr>
+                <td><strong>Advanced Mathematics</strong></td>
+                <td>10 MCQs</td>
+                <td>75 sec / MCQ</td>
+                <td>Functions, calculus, vectors, sequences &amp; series, probability</td>
+              </tr>
+              <tr>
+                <td><strong>Computer Science</strong></td>
+                <td>10 MCQs</td>
+                <td>65 sec / MCQ</td>
+                <td>Programming fundamentals, databases, networks, operating systems</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong style="color: var(--gold-light); font-family: var(--font-serif);">Aurelia Academic</strong> — Independent NTS NAT-ICS Preparation Platform.
+      </div>
+      <div>
+        All built-in questions and archive cards are original practice/specimen materials for educational preparation.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       APPLICATION LOGIC (VANILLA JAVASCRIPT — ZERO EXTERNAL DEPENDENCIES)
+       ======================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* ======================================================================
+         1. EDITABLE QUESTION BANK (36 PRACTICE QUESTIONS — 6 PER SUBJECT)
+         ----------------------------------------------------------------------
+         HOW TO EXPAND OR INSERT VERIFIED QUESTIONS:
+         Append objects to `QUESTION_BANK` using this exact schema:
+         {
+           id: "unique-id",
+           subject: "Quantitative Reasoning" | "Analytical Reasoning" | "English" | "Physics" | "Advanced Mathematics" | "Computer Science",
+           sourceLabel: "Practice Question", // Change to "Verified Past Question (Year)" only if verified
+           question: "Your question text here?",
+           options: ["Option A", "Option B", "Option C", "Option D"],
+           answerIndex: 0, // 0-based index of the correct option
+           explanation: "Clear step-by-step explanation."
+         }
+         ====================================================================== */
+      const SUBJECT_METADATA = [
+        {
+          name: "Quantitative Reasoning",
+          weight: "20 MCQs",
+          summary: "Arithmetic ratios, percentages, linear equations, word problems, and Euclidean geometry."
+        },
+        {
+          name: "Analytical Reasoning",
+          weight: "20 MCQs",
+          summary: "Constraint-based logic puzzles, seating sequences, grouping rules, and deductive inference."
+        },
+        {
+          name: "English",
+          weight: "20 MCQs",
+          summary: "Contextual vocabulary, verbal analogies, sentence structure, and passage comprehension."
+        },
+        {
+          name: "Physics",
+          weight: "10 MCQs",
+          summary: "Intermediate mechanics, thermodynamics, electromagnetism, optics, and modern physics."
+        },
+        {
+          name: "Advanced Mathematics",
+          weight: "10 MCQs",
+          summary: "Trigonometry, matrices, limits, differentiation, integration, and analytical geometry."
+        },
+        {
+          name: "Computer Science",
+          weight: "10 MCQs",
+          summary: "Digital logic, C/C++ programming concepts, relational databases, and computer networks."
+        }
+      ];
+
+      const QUESTION_BANK = [
+        /* -------------------- QUANTITATIVE REASONING (6) -------------------- */
+        {
+          id: "qr-1",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "If 35% of a number is 84, what is 60% of that same number?",
+          options: ["126", "144", "156", "168"],
+          answerIndex: 1,
+          explanation: "Let the number be x. 0.35x = 84 => x = 84 / 0.35 = 240. Then 60% of 240 = 0.60 × 240 = 144."
+        },
+        {
+          id: "qr-2",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "The ratio of boys to girls in a computer science seminar is 5 : 3. If there are 120 students in total, how many more boys than girls are present?",
+          options: ["15", "24", "30", "45"],
+          answerIndex: 2,
+          explanation: "Total parts = 5 + 3 = 8. Each part = 120 / 8 = 15 students. Difference = (5 - 3) × 15 = 2 × 15 = 30."
+        },
+        {
+          id: "qr-3",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "A train travels 180 km in 2 hours and 30 minutes. What is its average speed in meters per second (m/s)?",
+          options: ["18 m/s", "20 m/s", "24 m/s", "72 m/s"],
+          answerIndex: 1,
+          explanation: "Speed in km/h = 180 / 2.5 = 72 km/h. Multiply by 5/18 to convert to m/s: 72 × (5/18) = 20 m/s."
+        },
+        {
+          id: "qr-4",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "If 3x + 2y = 19 and 2x - y = 8, what is the value of x + y?",
+          options: ["5", "6", "7", "8"],
+          answerIndex: 2,
+          explanation: "From the second equation, y = 2x - 8. Substitute into the first: 3x + 2(2x - 8) = 19 => 7x - 16 = 19 => 7x = 35 => x = 5. Then y = 2(5) - 8 = 2, so x + y = 7."
+        },
+        {
+          id: "qr-5",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "The area of a circle is 49π square centimeters. What is its circumference?",
+          options: ["7π cm", "14π cm", "21π cm", "28π cm"],
+          answerIndex: 1,
+          explanation: "Area = πr² = 49π => r² = 49 => r = 7 cm. Circumference = 2πr = 2π(7) = 14π cm."
+        },
+        {
+          id: "qr-6",
+          subject: "Quantitative Reasoning",
+          sourceLabel: "Practice Question",
+          question: "The average of five consecutive odd integers is 27. What is the largest of these five integers?",
+          options: ["29", "31", "33", "35"],
+          answerIndex: 1,
+          explanation: "For an odd count of consecutive odd numbers, the average equals the middle (3rd) number: 27. The sequence is 23, 25, 27, 29, 31. The largest is 31."
+        },
+
+        /* -------------------- ANALYTICAL REASONING (6) -------------------- */
+        {
+          id: "ar-1",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "Five books—P, Q, R, S, and T—are stacked vertically. R is directly above P. T is at the very bottom. Q is above R but below S. Which book is in the exact middle (3rd from top)?",
+          options: ["P", "Q", "R", "S"],
+          answerIndex: 2,
+          explanation: "From top to bottom: S is above Q, Q is above R, R is directly above P, and T is at the bottom. Order (top to bottom): S, Q, R, P, T. The 3rd book is R."
+        },
+        {
+          id: "ar-2",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "All compilers are translators. Some translators are open-source tools. Which conclusion necessarily follows?",
+          options: [
+            "All compilers are open-source tools.",
+            "Some open-source tools are translators.",
+            "No compiler is an open-source tool.",
+            "All translators are compilers."
+          ],
+          answerIndex: 1,
+          explanation: "The statement 'Some translators are open-source tools' converts validly to 'Some open-source tools are translators.' The other options make unwarranted generalizations."
+        },
+        {
+          id: "ar-3",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "In a certain code, LOGIC is written as MPHJD. How is MATRIX written in that same code?",
+          options: ["NBUJSY", "NBUSJY", "MBUSJY", "NBUJTY"],
+          answerIndex: 1,
+          explanation: "Each letter is shifted forward by +1 in the alphabet: M→N, A→B, T→U, R→S, I→J, X→Y, giving NBUSJY."
+        },
+        {
+          id: "ar-4",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "A 3-member debate team is chosen from A, B, C, D, and E. If A is chosen, B cannot be chosen. Either C or D must be chosen, but not both. If A and E are selected, who must be the third member?",
+          options: ["B", "C or D", "Only C", "Only D"],
+          answerIndex: 1,
+          explanation: "With A selected, B is excluded. The third spot must satisfy 'either C or D, but not both,' meaning either C or D completes a valid team (ACE or ADE)."
+        },
+        {
+          id: "ar-5",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "Pointing to a photograph, Bilal says, 'She is the daughter of my grandfather's only son.' How is the person in the photograph related to Bilal?",
+          options: ["Mother", "Aunt", "Sister", "Cousin"],
+          answerIndex: 2,
+          explanation: "Bilal's grandfather's only son is Bilal's father. The daughter of Bilal's father is Bilal's sister."
+        },
+        {
+          id: "ar-6",
+          subject: "Analytical Reasoning",
+          sourceLabel: "Practice Question",
+          question: "Four friends sit in a row facing north. Hamza is to the immediate left of Zoya. Daniyal is at the far right end. Fatima is between Zoya and Daniyal. Who sits at the far left end?",
+          options: ["Hamza", "Zoya", "Fatima", "Daniyal"],
+          answerIndex: 0,
+          explanation: "From left to right: Hamza is immediately left of Zoya, Fatima is between Zoya and Daniyal, and Daniyal is at the far right → [Hamza, Zoya, Fatima, Daniyal]. Hamza is at the far left."
+        },
+
+        /* -------------------- ENGLISH (6) -------------------- */
+        {
+          id: "en-1",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Choose the word most nearly opposite in meaning to EPHEMERAL:",
+          options: ["Transient", "Perpetual", "Fragile", "Ambiguous"],
+          answerIndex: 1,
+          explanation: "Ephemeral means lasting for a very short time. Its direct antonym is perpetual (never ending or changing)."
+        },
+        {
+          id: "en-2",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Complete the analogy — ARCHITECT : BLUEPRINT :: COMPOSER :",
+          options: ["Orchestra", "Symphony", "Score", "Tempo"],
+          answerIndex: 2,
+          explanation: "An architect creates a blueprint as the written design for a building; a composer writes a musical score as the written specification for a performance."
+        },
+        {
+          id: "en-3",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Select the grammatically correct sentence:",
+          options: [
+            "Neither the professor nor the students was aware of the schedule change.",
+            "Neither the professor nor the students were aware of the schedule change.",
+            "Neither the professor or the students were aware of the schedule change.",
+            "Neither the professor nor the students is aware of the schedule change."
+          ],
+          answerIndex: 1,
+          explanation: "With 'neither...nor,' the verb agrees with the nearer subject ('students,' which is plural), requiring 'were.'"
+        },
+        {
+          id: "en-4",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Choose the word closest in meaning to METICULOUS:",
+          options: ["Careless", "Fastidious", "Impulsive", "Superficial"],
+          answerIndex: 1,
+          explanation: "Meticulous means showing great attention to detail; fastidious is its closest synonym."
+        },
+        {
+          id: "en-5",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Fill in the blank: 'Despite the _______ evidence presented during the audit, the committee requested an independent verification.'",
+          options: ["dubious", "compelling", "negligible", "erratic"],
+          answerIndex: 1,
+          explanation: "'Despite' signals contrast. Even though the evidence was strong ('compelling'), the committee still asked for independent verification."
+        },
+        {
+          id: "en-6",
+          subject: "English",
+          sourceLabel: "Practice Question",
+          question: "Identify the correct preposition: 'The research team succeeded _______ isolating the memory leak before deployment.'",
+          options: ["on", "at", "in", "for"],
+          answerIndex: 2,
+          explanation: "The standard idiomatic collocation in English is 'succeed in + gerund (-ing).'"
+        },
+
+        /* -------------------- PHYSICS (6) -------------------- */
+        {
+          id: "ph-1",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "If the momentum of a moving body is doubled while its mass remains constant, its kinetic energy becomes:",
+          options: ["Half", "Double", "Four times", "Eight times"],
+          answerIndex: 2,
+          explanation: "Kinetic energy K = p² / (2m). Since mass m is constant, K is proportional to p². Doubling p increases K by 2² = 4 times."
+        },
+        {
+          id: "ph-2",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "At what angle of projection (with the horizontal) is the horizontal range of a projectile equal to four times its maximum height?",
+          options: ["30°", "45°", "60°", "76°"],
+          answerIndex: 1,
+          explanation: "Range R = (v² sin 2θ)/g and max height H = (v² sin²θ)/(2g). Setting R = 4H gives 2 sin θ cos θ = 2 sin²θ => tan θ = 1 => θ = 45°."
+        },
+        {
+          id: "ph-3",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "Three resistors of 6 Ω each are connected in parallel. What is the equivalent resistance of the combination?",
+          options: ["2 Ω", "3 Ω", "6 Ω", "18 Ω"],
+          answerIndex: 0,
+          explanation: "For n identical resistors in parallel, R_eq = R / n = 6 Ω / 3 = 2 Ω."
+        },
+        {
+          id: "ph-4",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "Which phenomenon demonstrates the transverse nature of electromagnetic waves?",
+          options: ["Interference", "Diffraction", "Polarization", "Refraction"],
+          answerIndex: 2,
+          explanation: "Longitudinal waves cannot be polarized; polarization occurs exclusively in transverse waves such as light."
+        },
+        {
+          id: "ph-5",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "In the photoelectric effect, increasing the intensity of monochromatic light (above threshold frequency) increases:",
+          options: [
+            "The maximum kinetic energy of emitted electrons",
+            "The stopping potential",
+            "The number of emitted photoelectrons per second",
+            "The work function of the metal"
+          ],
+          answerIndex: 2,
+          explanation: "Higher intensity delivers more photons per unit time, ejecting more photoelectrons (increasing photoelectric current), while max KE depends on frequency."
+        },
+        {
+          id: "ph-6",
+          subject: "Physics",
+          sourceLabel: "Practice Question",
+          question: "The SI unit of magnetic flux density (magnetic field B) is:",
+          options: ["Weber", "Tesla", "Henry", "Gauss"],
+          answerIndex: 1,
+          explanation: "Weber is the unit of magnetic flux (Φ), whereas Tesla (Wb/m²) is the SI unit of magnetic flux density (B)."
+        },
+
+        /* -------------------- ADVANCED MATHEMATICS (6) -------------------- */
+        {
+          id: "am-1",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "What is the derivative of f(x) = ln(3x² + 1) with respect to x?",
+          options: [
+            "1 / (3x² + 1)",
+            "6x / (3x² + 1)",
+            "3x / (3x² + 1)",
+            "6 / (3x² + 1)"
+          ],
+          answerIndex: 1,
+          explanation: "By the chain rule, d/dx [ln(u)] = (1/u) · du/dx. Here u = 3x² + 1 and du/dx = 6x, giving 6x / (3x² + 1)."
+        },
+        {
+          id: "am-2",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "If matrix A = [[4, 2], [3, k]] is singular, what is the value of k?",
+          options: ["1.5", "2", "3", "6"],
+          answerIndex: 0,
+          explanation: "A matrix is singular when its determinant equals 0: det(A) = 4k - (2)(3) = 0 => 4k = 6 => k = 1.5."
+        },
+        {
+          id: "am-3",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "Evaluate the limit: lim (x → 0) [ sin(5x) / (2x) ]",
+          options: ["0", "2/5", "5/2", "1"],
+          answerIndex: 2,
+          explanation: "Rewrite as (5/2) · [sin(5x) / (5x)]. Since lim (u → 0) sin(u)/u = 1, the limit equals 5/2."
+        },
+        {
+          id: "am-4",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "What is the sum of the infinite geometric series 12 + 4 + 4/3 + 4/9 + ... ?",
+          options: ["16", "18", "20", "24"],
+          answerIndex: 1,
+          explanation: "First term a = 12, common ratio r = 4/12 = 1/3. Since |r| < 1, S_∞ = a / (1 - r) = 12 / (1 - 1/3) = 12 / (2/3) = 18."
+        },
+        {
+          id: "am-5",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "What is the eccentricity of the ellipse x² / 25 + y² / 9 = 1?",
+          options: ["3/5", "4/5", "5/4", "16/25"],
+          answerIndex: 1,
+          explanation: "Here a² = 25 and b² = 9, so c = √(a² - b²) = √(25 - 9) = 4. Eccentricity e = c / a = 4/5."
+        },
+        {
+          id: "am-6",
+          subject: "Advanced Mathematics",
+          sourceLabel: "Practice Question",
+          question: "Evaluate the definite integral ∫₀² (3x² + 2) dx:",
+          options: ["10", "12", "14", "16"],
+          answerIndex: 1,
+          explanation: "Antiderivative is x³ + 2x. Evaluating from 0 to 2: (2³ + 2(2)) - (0) = 8 + 4 = 12."
+        },
+
+        /* -------------------- COMPUTER SCIENCE (6) -------------------- */
+        {
+          id: "cs-1",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "Which data structure operates strictly on the Last-In, First-Out (LIFO) principle and is used to manage function call frames?",
+          options: ["Queue", "Stack", "Binary Search Tree", "Hash Table"],
+          answerIndex: 1,
+          explanation: "A Stack pushes and pops elements from the top in LIFO order, making it standard for call stacks and expression evaluation."
+        },
+        {
+          id: "cs-2",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "According to De Morgan's Theorem, the Boolean expression ¬(A · B) is logically equivalent to:",
+          options: ["¬A · ¬B", "¬A + ¬B", "A + B", "A · ¬B"],
+          answerIndex: 1,
+          explanation: "De Morgan's Law states that the complement of a product equals the sum of the complements: ¬(A · B) = ¬A + ¬B."
+        },
+        {
+          id: "cs-3",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "In relational database normalization, Second Normal Form (2NF) requires that a table is in 1NF and has no:",
+          options: [
+            "Primary keys",
+            "Partial dependencies on a composite primary key",
+            "Foreign key constraints",
+            "Atomic column values"
+          ],
+          answerIndex: 1,
+          explanation: "2NF eliminates partial dependencies—non-prime attributes must depend on the entire composite primary key, not just part of it."
+        },
+        {
+          id: "cs-4",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "Which layer of the OSI reference model is responsible for logical addressing (IP) and packet routing across networks?",
+          options: ["Data Link Layer", "Network Layer", "Transport Layer", "Session Layer"],
+          answerIndex: 1,
+          explanation: "Layer 3 (Network Layer) handles IP addressing, path determination, and packet forwarding between distinct networks."
+        },
+        {
+          id: "cs-5",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "What is the worst-case time complexity of Binary Search on a sorted array of n elements?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          answerIndex: 1,
+          explanation: "Binary search halves the search interval at each comparison, resulting in O(log₂ n) worst-case time complexity."
+        },
+        {
+          id: "cs-6",
+          subject: "Computer Science",
+          sourceLabel: "Practice Question",
+          question: "In C++, what is the output of: int a = 5; cout << (a++ + ++a);",
+          options: [
+            "10",
+            "11",
+            "12",
+            "Undefined behavior due to unsequenced modification of 'a'"
+          ],
+          answerIndex: 3,
+          explanation: "Modifying the same scalar variable 'a' more than once without an intervening sequence point in a single expression causes undefined behavior in C++."
+        }
+      ];
+
+      /* ======================================================================
+         2. PAST PAPERS DATA (CLEARLY LABELED SAMPLE / DEMO SPECIMENS)
+         ----------------------------------------------------------------------
+         HOW TO INSERT REAL VERIFIED PAST-PAPER LINKS IN CODE:
+         Add entries to `DEFAULT_PAPERS` with `verified: true` and a real URL:
+         {
+           id: "paper-verified-2026",
+           title: "NTS NAT-ICS Official Specimen Booklet",
+           year: "2026",
+           session: "Spring",
+           verified: true,
+           description: "Verified official syllabus guide and sample booklet.",
+           url: "https://www.nts.org.pk/..."
+         }
+         ====================================================================== */
+      const DEFAULT_PAPERS = [
+        {
+          id: "demo-2026-spring",
+          title: "NAT-ICS Specimen Set A (Sample / Demo)",
+          year: "2026",
+          session: "Spring",
+          verified: false,
+          description: "Sample / Demo blueprint covering 20 English, 20 Analytical, 20 Quantitative, and 30 ICS core items.",
+          demoMockConfig: { subject: "all", count: 12, duration: 15 }
+        },
+        {
+          id: "demo-2025-fall",
+          title: "NAT-ICS Analytical & Quantitative Drill Paper (Sample / Demo)",
+          year: "2025",
+          session: "Fall",
+          verified: false,
+          description: "Sample / Demo reconstruction focusing on logic puzzles, ratios, and algebraic speed drills.",
+          demoMockConfig: { subject: "Analytical Reasoning", count: 6, duration: 10 }
+        },
+        {
+          id: "demo-2025-summer",
+          title: "NAT-ICS Computer Science & Math Focus Set (Sample / Demo)",
+          year: "2025",
+          session: "Summer",
+          verified: false,
+          description: "Sample / Demo paper emphasizing calculus, matrices, DBMS normalization, and Boolean algebra.",
+          demoMockConfig: { subject: "Computer Science", count: 6, duration: 8 }
+        },
+        {
+          id: "demo-2024-fall",
+          title: "NAT-ICS Full-Length Practice Paper B (Sample / Demo)",
+          year: "2024",
+          session: "Fall",
+          verified: false,
+          description: "Sample / Demo mixed-discipline paper modeled on standard FSc ICS admission criteria.",
+          demoMockConfig: { subject: "all", count: 18, duration: 20 }
+        },
+        {
+          id: "demo-2023-spring",
+          title: "NAT-ICS Physics & Mechanics Specimen (Sample / Demo)",
+          year: "2023",
+          session: "Spring",
+          verified: false,
+          description: "Sample / Demo specimen concentrating on projectile motion, circuits, and wave optics.",
+          demoMockConfig: { subject: "Physics", count: 6, duration: 8 }
+        }
+      ];
+
+      /* ======================================================================
+         3. LOCAL STORAGE STATE MANAGEMENT
+         ====================================================================== */
+      const STORAGE_KEYS = {
+        STATS: "aurelia_nat_ics_stats_v1",
+        CUSTOM_PAPERS: "aurelia_nat_ics_custom_papers_v1"
+      };
+
+      function loadStats() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.STATS);
+          if (!raw) return { bestPercent: null, bestLabel: "", testsCompleted: 0, practiceSolved: 0 };
+          return JSON.parse(raw);
+        } catch (e) {
+          return { bestPercent: null, bestLabel: "", testsCompleted: 0, practiceSolved: 0 };
+        }
+      }
+
+      function saveStats(stats) {
+        try {
+          localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(stats));
+        } catch (e) {
+          // Fail gracefully if storage is restricted
+        }
+      }
+
+      function loadCustomPapers() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.CUSTOM_PAPERS);
+          return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveCustomPapers(list) {
+        try {
+          localStorage.setItem(STORAGE_KEYS.CUSTOM_PAPERS, JSON.stringify(list));
+        } catch (e) {
+          // Fail gracefully
+        }
+      }
+
+      /* ======================================================================
+         4. NAVIGATION & OVERVIEW DASHBOARD RENDERING
+         ====================================================================== */
+      const navToggle = document.getElementById("navToggle");
+      const primaryNav = document.getElementById("primaryNav");
+      const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+
+      navToggle.addEventListener("click", () => {
+        const isOpen = primaryNav.classList.toggle("open");
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.forEach((l) => l.classList.remove("active"));
+          link.classList.add("active");
+          primaryNav.classList.remove("open");
+          navToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      function updateDashboardUI() {
+        const stats = loadStats();
+        const bestEl = document.getElementById("dashBestScore");
+        const bestMetaEl = document.getElementById("dashBestMeta");
+        const testsCountEl = document.getElementById("dashTestsCount");
+        const practiceCountEl = document.getElementById("dashPracticeCount");
+
+        if (stats.bestPercent !== null) {
+          bestEl.textContent = `${stats.bestPercent}%`;
+          bestMetaEl.textContent = stats.bestLabel || "Personal best mock result";
+        } else {
+          bestEl.textContent = "—";
+          bestMetaEl.textContent = "Complete a mock test to record score";
+        }
+
+        testsCountEl.textContent = String(stats.testsCompleted || 0);
+        practiceCountEl.textContent = `${stats.practiceSolved || 0} practice drills answered`;
+      }
+
+      function renderSubjectOverviewCards() {
+        const grid = document.getElementById("subjectOverviewGrid");
+        grid.innerHTML = "";
+
+        SUBJECT_METADATA.forEach((subj) => {
+          const count = QUESTION_BANK.filter((q) => q.subject === subj.name).length;
+          const card = document.createElement("article");
+          card.className = "overview-card";
+          card.innerHTML = `
+            <div>
+              <div class="overview-top">
+                <h3>${subj.name}</h3>
+                <span class="weight-tag">${subj.weight}</span>
+              </div>
+              <p>${subj.summary}</p>
+            </div>
+            <div class="overview-footer">
+              <span>${count} Practice MCQs Ready</span>
+              <a href="#practice" class="btn btn-outline btn-sm" data-jump-subject="${subj.name}">
+                Practice &rarr;
+              </a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        grid.querySelectorAll("[data-jump-subject]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const targetSubject = btn.getAttribute("data-jump-subject");
+            selectPracticeSubject(targetSubject);
+          });
+        });
+      }
+
+      /* ======================================================================
+         5. PAST PAPERS FILTERING & CUSTOM VERIFIED LINK MANAGEMENT
+         ====================================================================== */
+      const filterYearEl = document.getElementById("filterYear");
+      const filterSessionEl = document.getElementById("filterSession");
+      const filterSearchEl = document.getElementById("filterSearch");
+      const papersGridEl = document.getElementById("papersGrid");
+      const papersEmptyEl = document.getElementById("papersEmptyState");
+
+      function getAllPapers() {
+        return [...loadCustomPapers(), ...DEFAULT_PAPERS];
+      }
+
+      function renderPapers() {
+        const yearVal = filterYearEl.value;
+        const sessionVal = filterSessionEl.value;
+        const queryVal = filterSearchEl.value.trim().toLowerCase();
+
+        const filtered = getAllPapers().filter((paper) => {
+          const matchYear = yearVal === "all" || paper.year === yearVal;
+          const matchSession = sessionVal === "all" || paper.session === sessionVal;
+          const matchQuery =
+            !queryVal ||
+            paper.title.toLowerCase().includes(queryVal) ||
+            paper.description.toLowerCase().includes(queryVal);
+          return matchYear && matchSession && matchQuery;
+        });
+
+        papersGridEl.innerHTML = "";
+
+        if (filtered.length === 0) {
+          papersEmptyEl.classList.remove("hidden");
+          return;
+        }
+
+        papersEmptyEl.classList.add("hidden");
+
+        filtered.forEach((paper) => {
+          const card = document.createElement("article");
+          card.className = "paper-card";
+
+          const statusBadge = paper.verified
+            ? `<span class="badge badge-verified">Verified Link</span>`
+            : `<span class="badge badge-demo">Sample / Demo Paper</span>`;
+
+          const actionHtml = paper.verified
+            ? `<a href="${escapeHtml(paper.url)}" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">Open Verified Resource</a>`
+            : `<button type="button" class="btn btn-outline btn-sm" data-launch-demo="${paper.id}">
+                 Attempt Sample Paper in Mock Engine
+               </button>`;
+
+          card.innerHTML = `
+            <div>
+              <div class="paper-badges">
+                ${statusBadge}
+                <span class="badge badge-session">${escapeHtml(paper.year)} • ${escapeHtml(paper.session)}</span>
+              </div>
+              <h3>${escapeHtml(paper.title)}</h3>
+              <p>${escapeHtml(paper.description)}</p>
+            </div>
+            <div class="paper-actions">
+              ${actionHtml}
+            </div>
+          `;
+          papersGridEl.appendChild(card);
+        });
+
+        papersGridEl.querySelectorAll("[data-launch-demo]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const paperId = btn.getAttribute("data-launch-demo");
+            const paper = DEFAULT_PAPERS.find((p) => p.id === paperId);
+            if (paper && paper.demoMockConfig) {
+              document.getElementById("mockSubject").value = paper.demoMockConfig.subject;
+              document.getElementById("mockCount").value = paper.demoMockConfig.count;
+              document.getElementById("mockDuration").value = paper.demoMockConfig.duration;
+              document.getElementById("mock-test").scrollIntoView({ behavior: "smooth" });
+              startMockExam(
+                paper.demoMockConfig.subject,
+                paper.demoMockConfig.count,
+                paper.demoMockConfig.duration
+              );
+            }
+          });
+        });
+      }
+
+      [filterYearEl, filterSessionEl].forEach((el) => el.addEventListener("change", renderPapers));
+      filterSearchEl.addEventListener("input", renderPapers);
+
+      function resetAllPaperFilters() {
+        filterYearEl.value = "all";
+        filterSessionEl.value = "all";
+        filterSearchEl.value = "";
+        renderPapers();
+      }
+
+      document.getElementById("resetPaperFilters").addEventListener("click", resetAllPaperFilters);
+      document.getElementById("emptyResetBtn").addEventListener("click", resetAllPaperFilters);
+
+      // Add custom verified paper link
+      document.getElementById("addPaperForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const title = document.getElementById("newPaperTitle").value.trim();
+        const year = document.getElementById("newPaperYear").value;
+        const session = document.getElementById("newPaperSession").value;
+        const url = document.getElementById("newPaperUrl").value.trim();
+        const errEl = document.getElementById("addPaperError");
+
+        errEl.textContent = "";
+
+        if (title.length < 4) {
+          errEl.textContent = "Please enter a descriptive paper title (at least 4 characters).";
+          return;
+        }
+
+        try {
+          const parsed = new URL(url);
+          if (!["http:", "https:"].includes(parsed.protocol)) {
+            throw new Error("Invalid protocol");
+          }
+        } catch (_) {
+          errEl.textContent = "Please provide a valid http:// or https:// URL to your verified paper.";
+          return;
+        }
+
+        const customList = loadCustomPapers();
+        customList.unshift({
+          id: "custom-" + Date.now(),
+          title,
+          year,
+          session,
+          verified: true,
+          description: "User-added verified past-paper link stored locally in this browser.",
+          url
+        });
+        saveCustomPapers(customList);
+
+        e.target.reset();
+        renderPapers();
+      });
+
+      document.getElementById("clearCustomPapersBtn").addEventListener("click", () => {
+        saveCustomPapers([]);
+        renderPapers();
+      });
+
+      /* ======================================================================
+         6. MOCK EXAM ENGINE (SETUP, TIMER, NAVIGATION, CONFIRMATION, REVIEW)
+         ====================================================================== */
+      const mockSetupView = document.getElementById("mockSetupView");
+      const mockActiveView = document.getElementById("mockActiveView");
+      const mockResultsView = document.getElementById("mockResultsView");
+      const submitConfirmBanner = document.getElementById("submitConfirmBanner");
+
+      let mockState = {
+        questions: [],
+        answers: [],
+        currentIndex: 0,
+        secondsRemaining: 0,
+        timerId: null,
+        scopeLabel: ""
+      };
+
+      function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function buildMockQuestionSet(subject, count) {
+        if (subject !== "all") {
+          const pool = shuffleArray(QUESTION_BANK.filter((q) => q.subject === subject));
+          return pool.slice(0, Math.min(count, pool.length));
+        }
+
+        // Balanced round-robin selection across all 6 subjects
+        const subjectPools = {};
+        SUBJECT_METADATA.forEach((s) => {
+          subjectPools[s.name] = shuffleArray(QUESTION_BANK.filter((q) => q.subject === s.name));
+        });
+
+        const selected = [];
+        let round = 0;
+        while (selected.length < count) {
+          let addedInRound = false;
+          for (const s of SUBJECT_METADATA) {
+            if (selected.length >= count) break;
+            if (subjectPools[s.name][round]) {
+              selected.push(subjectPools[s.name][round]);
+              addedInRound = true;
+            }
+          }
+          if (!addedInRound) break;
+          round++;
+        }
+        return selected;
+      }
+
+      document.getElementById("mockSetupForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const subject = document.getElementById("mockSubject").value;
+        const count = parseInt(document.getElementById("mockCount").value, 10);
+        const duration = parseInt(document.getElementById("mockDuration").value, 10);
+        const errEl = document.getElementById("mockSetupError");
+
+        errEl.textContent = "";
+
+        const maxAvailable = subject === "all" ? QUESTION_BANK.length : 6;
+
+        if (isNaN(count) || count < 5 || count > maxAvailable) {
+          errEl.textContent = `Please choose between 5 and ${maxAvailable} questions for ${subject === "all" ? "Full NAT-ICS Mix" : subject}.`;
+          return;
+        }
+
+        if (isNaN(duration) || duration < 3 || duration > 120) {
+          errEl.textContent = "Please choose a duration between 3 and 120 minutes.";
+          return;
+        }
+
+        startMockExam(subject, count, duration);
+      });
+
+      function startMockExam(subject, count, durationMinutes) {
+        if (mockState.timerId) {
+          clearInterval(mockState.timerId);
+        }
+
+        const chosenQuestions = buildMockQuestionSet(subject, count);
+
+        mockState = {
+          questions: chosenQuestions,
+          answers: new Array(chosenQuestions.length).fill(null),
+          currentIndex: 0,
+          secondsRemaining: durationMinutes * 60,
+          timerId: null,
+          scopeLabel: subject === "all" ? "Full NAT-ICS Balanced Mix" : subject
+        };
+
+        document.getElementById("examScopeLabel").textContent = mockState.scopeLabel;
+        submitConfirmBanner.classList.add("hidden");
+        mockSetupView.classList.add("hidden");
+        mockResultsView.classList.add("hidden");
+        mockActiveView.classList.remove("hidden");
+
+        renderExamPalette();
+        renderCurrentExamQuestion();
+        updateTimerDisplay();
+
+        mockState.timerId = setInterval(() => {
+          mockState.secondsRemaining--;
+          updateTimerDisplay();
+          if (mockState.secondsRemaining <= 0) {
+            finalizeMockExam(true);
+          }
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const timerEl = document.getElementById("examTimer");
+        const mins = Math.max(0, Math.floor(mockState.secondsRemaining / 60));
+        const secs = Math.max(0, mockState.secondsRemaining % 60);
+        timerEl.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+        if (mockState.secondsRemaining <= 60) {
+          timerEl.classList.add("timer-low");
+        } else {
+          timerEl.classList.remove("timer-low");
+        }
+      }
+
+      function renderExamPalette() {
+        const grid = document.getElementById("examPaletteGrid");
+        grid.innerHTML = "";
+
+        mockState.questions.forEach((_, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "palette-btn";
+          btn.textContent = String(idx + 1);
+          btn.setAttribute("aria-label", `Go to question ${idx + 1}`);
+
+          if (mockState.answers[idx] !== null) btn.classList.add("answered");
+          if (idx === mockState.currentIndex) btn.classList.add("current");
+
+          btn.addEventListener("click", () => {
+            mockState.currentIndex = idx;
+            renderCurrentExamQuestion();
+            renderExamPalette();
+          });
+          grid.appendChild(btn);
+        });
+
+        const answeredCount = mockState.answers.filter((a) => a !== null).length;
+        const total = mockState.questions.length;
+        document.getElementById("answeredCounter").textContent = `${answeredCount} / ${total} Answered`;
+        document.getElementById("examProgressFill").style.width = `${(answeredCount / total) * 100}%`;
+      }
+
+      function renderCurrentExamQuestion() {
+        const idx = mockState.currentIndex;
+        const q = mockState.questions[idx];
+        const total = mockState.questions.length;
+
+        document.getElementById("examQNumber").textContent = `Question ${idx + 1} of ${total}`;
+        document.getElementById("examQSubject").textContent = `${q.subject} • ${q.sourceLabel}`;
+        document.getElementById("examQPrompt").textContent = q.question;
+
+        const optionsList = document.getElementById("examOptionsList");
+        optionsList.innerHTML = "";
+
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((optText, optIdx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option-btn";
+          btn.setAttribute("role", "radio");
+          const isSelected = mockState.answers[idx] === optIdx;
+          btn.setAttribute("aria-checked", String(isSelected));
+          if (isSelected) btn.classList.add("selected");
+
+          btn.innerHTML = `
+            <span class="option-key">${letters[optIdx]}</span>
+            <span>${escapeHtml(optText)}</span>
+          `;
+
+          btn.addEventListener("click", () => {
+            mockState.answers[idx] = optIdx;
+            renderCurrentExamQuestion();
+            renderExamPalette();
+          });
+
+          optionsList.appendChild(btn);
+        });
+
+        document.getElementById("prevQBtn").disabled = idx === 0;
+        document.getElementById("nextQBtn").disabled = idx === total - 1;
+      }
+
+      document.getElementById("prevQBtn").addEventListener("click", () => {
+        if (mockState.currentIndex > 0) {
+          mockState.currentIndex--;
+          renderCurrentExamQuestion();
+          renderExamPalette();
+        }
+      });
+
+      document.getElementById("nextQBtn").addEventListener("click", () => {
+        if (mockState.currentIndex < mockState.questions.length - 1) {
+          mockState.currentIndex++;
+          renderCurrentExamQuestion();
+          renderExamPalette();
+        }
+      });
+
+      document.getElementById("openSubmitConfirmBtn").addEventListener("click", () => {
+        const unanswered = mockState.answers.filter((a) => a === null).length;
+        const confirmText = document.getElementById("submitConfirmText");
+        if (unanswered > 0) {
+          confirmText.textContent = `You still have ${unanswered} unanswered question(s). Remember: NTS NAT has no negative marking.`;
+        } else {
+          confirmText.textContent = "All questions have been answered. Ready to submit and view explanations?";
+        }
+        submitConfirmBanner.classList.remove("hidden");
+      });
+
+      document.getElementById("cancelSubmitBtn").addEventListener("click", () => {
+        submitConfirmBanner.classList.add("hidden");
+      });
+
+      document.getElementById("confirmSubmitBtn").addEventListener("click", () => {
+        finalizeMockExam(false);
+      });
+
+      function finalizeMockExam(autoSubmitted) {
+        if (mockState.timerId) {
+          clearInterval(mockState.timerId);
+          mockState.timerId = null;
+        }
+
+        const total = mockState.questions.length;
+        let correct = 0;
+        let unanswered = 0;
+
+        mockState.questions.forEach((q, idx) => {
+          const userAns = mockState.answers[idx];
+          if (userAns === null) {
+            unanswered++;
+          } else if (userAns === q.answerIndex) {
+            correct++;
+          }
+        });
+
+        const wrong = total - correct - unanswered;
+        const percent = Math.round((correct / total) * 100);
+
+        // Save best score in localStorage
+        const stats = loadStats();
+        stats.testsCompleted = (stats.testsCompleted || 0) + 1;
+        if (stats.bestPercent === null || percent >= stats.bestPercent) {
+          stats.bestPercent = percent;
+          stats.bestLabel = `${correct}/${total} (${mockState.scopeLabel})`;
+        }
+        saveStats(stats);
+        updateDashboardUI();
+
+        // Render Results
+        mockActiveView.classList.add("hidden");
+        mockResultsView.classList.remove("hidden");
+
+        const summaryGrid = document.getElementById("resultsSummaryGrid");
+        summaryGrid.innerHTML = `
+          <div class="result-stat">
+            <div class="num">${percent}%</div>
+            <div class="lbl">${autoSubmitted ? "Time Expired • Score" : "Final Accuracy"}</div>
+          </div>
+          <div class="result-stat">
+            <div class="num" style="color: var(--success);">${correct} / ${total}</div>
+            <div class="lbl">Correct Answers</div>
+          </div>
+          <div class="result-stat">
+            <div class="num" style="color: var(--danger);">${wrong}</div>
+            <div class="lbl">Incorrect</div>
+          </div>
+          <div class="result-stat">
+            <div class="num" style="color: var(--text-secondary);">${unanswered}</div>
+            <div class="lbl">Unanswered</div>
+          </div>
+        `;
+
+        const reviewList = document.getElementById("resultsReviewList");
+        reviewList.innerHTML = "";
+        const letters = ["A", "B", "C", "D"];
+
+        mockState.questions.forEach((q, idx) => {
+          const userAns = mockState.answers[idx];
+          const isCorrect = userAns === q.answerIndex;
+          const userText =
+            userAns === null
+              ? "Not answered"
+              : `${letters[userAns]}. ${escapeHtml(q.options[userAns])}`;
+          const correctText = `${letters[q.answerIndex]}. ${escapeHtml(q.options[q.answerIndex])}`;
+
+          const item = document.createElement("article");
+          item.className = `review-item ${isCorrect ? "is-correct" : "is-wrong"}`;
+          item.innerHTML = `
+            <div class="question-meta-line">
+              <span>Question ${idx + 1} • ${escapeHtml(q.subject)} (${escapeHtml(q.sourceLabel)})</span>
+              <span style="color: ${isCorrect ? "var(--success)" : "var(--danger)"};">
+                ${isCorrect ? "Correct" : "Needs Review"}
+              </span>
+            </div>
+            <p style="font-weight: 600; margin-bottom: 10px;">${escapeHtml(q.question)}</p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              <strong>Your Selection:</strong> ${userText}<br/>
+              <strong>Correct Answer:</strong> <span style="color: var(--success);">${correctText}</span>
+            </p>
+            <div class="explanation-box">
+              <strong style="color: var(--gold-light);">Explanation:</strong> ${escapeHtml(q.explanation)}
+            </div>
+          `;
+          reviewList.appendChild(item);
+        });
+      }
+
+      document.getElementById("retakeNewMockBtn").addEventListener("click", () => {
+        mockResultsView.classList.add("hidden");
+        mockSetupView.classList.remove("hidden");
+      });
+
+      /* ======================================================================
+         7. SUBJECT PRACTICE HUB (6 SUBJECTS, INSTANT FEEDBACK & EXPLANATIONS)
+         ====================================================================== */
+      let activePracticeSubject = SUBJECT_METADATA[0].name;
+      // Track answers per question ID for current session: { [questionId]: selectedOptionIndex }
+      let practiceAttempts = {};
+
+      function renderPracticeTabs() {
+        const tabsContainer = document.getElementById("practiceSubjectTabs");
+        tabsContainer.innerHTML = "";
+
+        SUBJECT_METADATA.forEach((subj) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "tab-btn";
+          btn.setAttribute("role", "tab");
+          const isActive = subj.name === activePracticeSubject;
+          btn.setAttribute("aria-selected", String(isActive));
+          if (isActive) btn.classList.add("active");
+          btn.textContent = subj.name;
+
+          btn.addEventListener("click", () => selectPracticeSubject(subj.name));
+          tabsContainer.appendChild(btn);
+        });
+      }
+
+      function selectPracticeSubject(subjectName) {
+        activePracticeSubject = subjectName;
+        renderPracticeTabs();
+        renderPracticeQuestions();
+      }
+
+      function renderPracticeQuestions() {
+        document.getElementById("activePracticeTitle").textContent = activePracticeSubject;
+        const questions = QUESTION_BANK.filter((q) => q.subject === activePracticeSubject);
+
+        let solvedCount = 0;
+        let correctCount = 0;
+        questions.forEach((q) => {
+          if (practiceAttempts[q.id] !== undefined) {
+            solvedCount++;
+            if (practiceAttempts[q.id] === q.answerIndex) correctCount++;
+          }
+        });
+
+        document.getElementById("practiceScoreBadge").textContent =
+          `Subject Progress: ${correctCount} correct out of ${solvedCount} attempted (${questions.length} total)`;
+
+        const container = document.getElementById("practiceQuestionsContainer");
+        container.innerHTML = "";
+        const letters = ["A", "B", "C", "D"];
+
+        questions.forEach((q, idx) => {
+          const userChoice = practiceAttempts[q.id];
+          const isAnswered = userChoice !== undefined;
+
+          const card = document.createElement("article");
+          card.className = "practice-card";
+
+          const optionsHtml = q.options
+            .map((opt, optIdx) => {
+              let stateClass = "";
+              if (isAnswered) {
+                if (optIdx === q.answerIndex) stateClass = "correct";
+                else if (optIdx === userChoice) stateClass = "incorrect";
+              }
+              return `
+                <button
+                  type="button"
+                  class="option-btn ${stateClass}"
+                  data-qid="${q.id}"
+                  data-opt="${optIdx}"
+                  ${isAnswered ? "disabled" : ""}
+                >
+                  <span class="option-key">${letters[optIdx]}</span>
+                  <span>${escapeHtml(opt)}</span>
+                </button>
+              `;
+            })
+            .join("");
+
+          const feedbackHtml = isAnswered
+            ? `
+              <div class="explanation-box">
+                <strong style="color: ${userChoice === q.answerIndex ? "var(--success)" : "var(--danger)"};">
+                  ${userChoice === q.answerIndex ? "Correct!" : `Incorrect — Correct option is ${letters[q.answerIndex]}.`}
+                </strong>
+                <p style="margin-top: 6px;">${escapeHtml(q.explanation)}</p>
+              </div>
+            `
+            : "";
+
+          card.innerHTML = `
+            <div class="question-meta-line">
+              <span>Drill ${idx + 1} of ${questions.length}</span>
+              <span>${escapeHtml(q.sourceLabel)}</span>
+            </div>
+            <div class="question-prompt">${escapeHtml(q.question)}</div>
+            <div class="options-stack" style="margin-bottom: ${isAnswered ? "14px" : "0"};">
+              ${optionsHtml}
+            </div>
+            ${feedbackHtml}
+          `;
+
+          container.appendChild(card);
+        });
+
+        container.querySelectorAll("[data-qid]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const qId = btn.getAttribute("data-qid");
+            const optIdx = parseInt(btn.getAttribute("data-opt"), 10);
+            if (practiceAttempts[qId] === undefined) {
+              practiceAttempts[qId] = optIdx;
+              const stats = loadStats();
+              stats.practiceSolved = (stats.practiceSolved || 0) + 1;
+              saveStats(stats);
+              updateDashboardUI();
+              renderPracticeQuestions();
+            }
+          });
+        });
+      }
+
+      document.getElementById("resetPracticeSubjectBtn").addEventListener("click", () => {
+        const questions = QUESTION_BANK.filter((q) => q.subject === activePracticeSubject);
+        questions.forEach((q) => {
+          delete practiceAttempts[q.id];
+        });
+        renderPracticeQuestions();
+      });
+
+      /* ======================================================================
+         8. SECURITY UTILITY & INITIALIZATION
+         ====================================================================== */
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      // Initialize all modules on load
+      updateDashboardUI();
+      renderSubjectOverviewCards();
+      renderPapers();
+      renderPracticeTabs();
+      renderPracticeQuestions();
+    })();
+  </script>
+</body>
+</html>
